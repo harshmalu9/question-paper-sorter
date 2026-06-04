@@ -1,22 +1,25 @@
-from ocr.ocr_engine import OCREngine
+from ocr.ocr_processor import OCRProcessor
 
 
 def main():
 
-    ocr = OCREngine()
+    processor = OCRProcessor()
 
-    text = ocr.extract_text(
-        "data/temp/page_001.jpg"
+    pages = processor.process_directory(
+        "data/temp",
+        max_pages=5
     )
 
-    with open(
-        "data/output/page_001.txt",
-        "w",
-        encoding="utf-8"
-    ) as file:
-        file.write(text)
+    print()
+    print(f"Total pages: {len(pages)}")
 
-    print("OCR output saved.")
+    print()
+    print("First page preview:")
+    print()
+
+    print(
+        pages[0].ocr_text[:500]
+    )
 
 
 if __name__ == "__main__":
