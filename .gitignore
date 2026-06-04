@@ -1,0 +1,71 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual Environment
+# =========================
+venv/
+.env
+.env.*
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Runtime Cache
+# =========================
+data/cache/
+*.cache
+
+# =========================
+# Generated Images
+# =========================
+data/temp/
+
+# =========================
+# OCR Outputs
+# =========================
+data/output/
+
+# =========================
+# Large Input Files
+# Keep folder, ignore contents
+# =========================
+data/input/*
+
+# Keep directory structure
+!data/input/.gitkeep
+!data/output/.gitkeep
+!data/temp/.gitkeep
+!data/cache/.gitkeep
+
+# =========================
+# Testing Artifacts
+# =========================
+coverage/
+htmlcov/
+.pytest_cache/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
