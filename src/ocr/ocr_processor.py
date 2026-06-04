@@ -24,6 +24,12 @@ class OCRProcessor:
         if max_pages is not None:
             image_files = image_files[:max_pages]
 
+        cache_dir = Path("data/cache/ocr")
+        cache_dir.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
         pages = []
 
         for page_number, image_path in enumerate(
@@ -31,13 +37,35 @@ class OCRProcessor:
             start=1
         ):
 
-            print(
-                f"OCR page {page_number}/{len(image_files)}"
+            cache_file = (
+                cache_dir /
+                f"{image_path.stem}.txt"
             )
 
-            text = self.ocr_engine.extract_text(
-                str(image_path)
-            )
+            if cache_file.exists():
+
+                print(
+                    f"Using cache: {image_path.name}"
+                )
+
+                text = cache_file.read_text(
+                    encoding="utf-8"
+                )
+
+            else:
+
+                print(
+                    f"OCR page {page_number}/{len(image_files)}"
+                )
+
+                text = self.ocr_engine.extract_text(
+                    str(image_path)
+                )
+
+                cache_file.write_text(
+                    text,
+                    encoding="utf-8"
+                )
 
             pages.append(
                 PageMetadata(

@@ -1,4 +1,5 @@
 from ocr.ocr_processor import OCRProcessor
+from classification.subject_classifier import SubjectClassifier
 
 
 def main():
@@ -7,19 +8,24 @@ def main():
 
     pages = processor.process_directory(
         "data/temp",
-        max_pages=5
+        max_pages=1
+    )
+
+    classifier = SubjectClassifier()
+
+    page = pages[0]
+
+    subject, scores = classifier.classify(
+        page.ocr_text
     )
 
     print()
-    print(f"Total pages: {len(pages)}")
+    print("Predicted Subject:")
+    print(subject)
 
     print()
-    print("First page preview:")
-    print()
-
-    print(
-        pages[0].ocr_text[:500]
-    )
+    print("Scores:")
+    print(scores)
 
 
 if __name__ == "__main__":
