@@ -3,11 +3,17 @@ from dataclasses import dataclass
 
 @dataclass
 class PageMetadata:
+
     page_number: int
+
     image_path: str
+
     ocr_text: str
 
     subject: str | None = None
+
+    subject_confidence: float = 0.0
+
     term: str | None = None
 
-    confidence: float = 0.0
+    term_confidence: float = 0.0

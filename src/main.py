@@ -1,5 +1,6 @@
 from ocr.ocr_processor import OCRProcessor
 from classification.subject_classifier import SubjectClassifier
+from exporters.metadata_exporter import MetadataExporter
 
 
 def main():
@@ -8,24 +9,41 @@ def main():
 
     pages = processor.process_directory(
         "data/temp",
-        max_pages=1
+        max_pages=None
     )
 
     classifier = SubjectClassifier()
 
-    page = pages[0]
+    for page in pages:
 
-    subject, scores = classifier.classify(
-        page.ocr_text
+        subject, scores = classifier.classify(
+            page.ocr_text
+        )
+
+        page.subject = subject
+
+        page.subject_confidence = max(
+            scores.values()
+        )
+
+        print()
+        print(
+            f"Page {page.page_number}: "
+            f"{subject}"
+        )
+
+        print(scores)
+
+    MetadataExporter.export_pages(
+        pages,
+        "data/output/pages.json"
     )
 
     print()
-    print("Predicted Subject:")
-    print(subject)
-
-    print()
-    print("Scores:")
-    print(scores)
+    print(
+        "Metadata exported to "
+        "data/output/pages.json"
+    )
 
 
 if __name__ == "__main__":
