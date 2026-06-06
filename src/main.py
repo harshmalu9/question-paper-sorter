@@ -1,6 +1,10 @@
 from ocr.ocr_processor import OCRProcessor
-from classification.subject_classifier import SubjectClassifier
-from exporters.metadata_exporter import MetadataExporter
+from classification.embedding_classifier import (
+    EmbeddingClassifier
+)
+from exporters.metadata_exporter import (
+    MetadataExporter
+)
 
 
 def main():
@@ -9,10 +13,10 @@ def main():
 
     pages = processor.process_directory(
         "data/temp",
-        max_pages=10
+        max_pages=9
     )
 
-    classifier = SubjectClassifier()
+    classifier = EmbeddingClassifier()
 
     for page in pages:
 
@@ -22,17 +26,26 @@ def main():
 
         page.subject = subject
 
-        page.subject_confidence = max(
-            scores.values()
+        page.subject_confidence = (
+            max(scores.values())
         )
 
         print()
+
         print(
             f"Page {page.page_number}: "
             f"{subject}"
         )
 
-        print(scores)
+        for name, score in sorted(
+            scores.items(),
+            key=lambda x: x[1],
+            reverse=True
+        ):
+            print(
+                f"{name}: "
+                f"{score:.4f}"
+            )
 
     MetadataExporter.export_pages(
         pages,
@@ -40,6 +53,7 @@ def main():
     )
 
     print()
+
     print(
         "Metadata exported to "
         "data/output/pages.json"
