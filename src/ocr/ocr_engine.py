@@ -22,6 +22,25 @@ class OCREngine:
 
         print("OCR model loaded.")
 
+    def calculate_text_score(
+        self,
+        text: str
+    ) -> float:
+
+        if not text:
+            return 0
+
+        letters = sum(
+            char.isalpha()
+            for char in text
+        )
+
+        words = len(
+            text.split()
+        )
+
+        return letters + (words * 10)
+
     def extract_text(
         self,
         image_path: str
@@ -33,8 +52,8 @@ class OCREngine:
         )
 
         best_text = ""
-
         best_rotation = 0
+        best_score = 0
 
         for angle, image in rotations.items():
 
@@ -59,8 +78,13 @@ class OCREngine:
 
             text = "\n".join(result)
 
-            if len(text) > len(best_text):
+            score = self.calculate_text_score(
+                text
+            )
 
+            if score > best_score:
+
+                best_score = score
                 best_text = text
                 best_rotation = angle
 

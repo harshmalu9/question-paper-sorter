@@ -13,7 +13,6 @@ def main():
 
     pages = processor.process_directory(
         "data/temp",
-        max_pages=9
     )
 
     classifier = EmbeddingClassifier()

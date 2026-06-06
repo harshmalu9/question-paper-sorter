@@ -98,4 +98,9 @@ class EmbeddingClassifier:
             key=scores.get
         )
 
+        best_score = scores[best_subject]
+
+        if best_score < 0.15:
+            return "Unknown", scores
+
         return best_subject, scores
