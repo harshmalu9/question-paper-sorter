@@ -7,8 +7,8 @@ class OCREngine:
         print("Loading OCR model...")
 
         self.reader = easyocr.Reader(
-            ["en"],
-            gpu=False
+            ['en'],
+            gpu=True
         )
 
         print("OCR model loaded.")
