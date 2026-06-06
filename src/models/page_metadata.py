@@ -14,6 +14,10 @@ class PageMetadata:
 
     subject_confidence: float = 0.0
 
+    document_type: str | None = None
+
+    document_type_confidence: float = 0.0
+
     term: str | None = None
 
     term_confidence: float = 0.0
