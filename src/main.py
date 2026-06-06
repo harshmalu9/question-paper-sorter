@@ -9,7 +9,7 @@ def main():
 
     pages = processor.process_directory(
         "data/temp",
-        max_pages=None
+        max_pages=10
     )
 
     classifier = SubjectClassifier()
