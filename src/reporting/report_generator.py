@@ -7,10 +7,11 @@ class ReportGenerator:
     def generate(
         self,
         pages,
-        output_file
+        output_path
     ):
 
         subject_counts = Counter()
+
         type_counts = Counter()
 
         for page in pages:
@@ -25,12 +26,16 @@ class ReportGenerator:
 
         report = {
             "total_pages": len(pages),
-            "subjects": dict(subject_counts),
-            "document_types": dict(type_counts)
+            "subjects": dict(
+                subject_counts
+            ),
+            "document_types": dict(
+                type_counts
+            )
         }
 
         with open(
-            output_file,
+            output_path,
             "w"
         ) as f:
 

@@ -27,6 +27,10 @@ from exporters.metadata_exporter import (
     MetadataExporter
 )
 
+from reporting.report_generator import (
+    ReportGenerator
+)
+
 
 def main():
 
@@ -106,10 +110,14 @@ def main():
             f"Type: {document_type}"
         )
 
+    # Export metadata
+
     MetadataExporter.export_pages(
         pages,
         "data/output/pages.json"
     )
+
+    # Organize pages
 
     sorted_dir = Path(
         "data/output/sorted"
@@ -127,6 +135,8 @@ def main():
         pages,
         "data/output/sorted"
     )
+
+    # Generate PDFs
 
     pdf_dir = Path(
         "data/output/pdfs"
@@ -147,6 +157,17 @@ def main():
         "data/output/pdfs"
     )
 
+    # Generate report
+
+    report_generator = (
+        ReportGenerator()
+    )
+
+    report_generator.generate(
+        pages,
+        "data/output/report.json"
+    )
+
     print()
 
     print(
@@ -162,6 +183,11 @@ def main():
     print(
         "PDFs generated in "
         "data/output/pdfs"
+    )
+
+    print(
+        "Report generated in "
+        "data/output/report.json"
     )
 
 
