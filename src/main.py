@@ -1,6 +1,10 @@
 from pathlib import Path
 import shutil
 
+from sentence_transformers import (
+    SentenceTransformer
+)
+
 from ocr.ocr_processor import OCRProcessor
 
 from classification.embedding_classifier import (
@@ -9,6 +13,14 @@ from classification.embedding_classifier import (
 
 from classification.document_type_classifier import (
     DocumentTypeClassifier
+)
+
+from segmentation.document_boundary_detector import (
+    DocumentBoundaryDetector
+)
+
+from discovery.topic_extractor import (
+    TopicExtractor
 )
 
 from organizer.page_organizer import (
@@ -36,54 +48,158 @@ def main(config_path: str = None):
         "data/temp"
     )
 
+    print("Loading embedding model...")
+
+    model = SentenceTransformer(
+        "all-MiniLM-L6-v2"
+    )
+
+    print("Embedding model loaded.")
+
     subject_classifier = (
-        EmbeddingClassifier(config_path)
+        EmbeddingClassifier(
+            model=model,
+            config_path=config_path,
+        )
     )
 
     document_classifier = (
         DocumentTypeClassifier()
     )
 
-    for page in pages:
+    detector = DocumentBoundaryDetector(
+        model=model
+    )
+
+    topic_extractor = TopicExtractor()
+
+    groups = detector.detect(pages)
+
+    for group_index, group in enumerate(
+        groups, start=1
+    ):
+
+        combined_text = "\n".join(
+            page.ocr_text
+            for page in group.pages
+        )
 
         subject, subject_scores = (
             subject_classifier.classify(
-                page.ocr_text
+                combined_text
             )
         )
 
-        page.subject = subject
+        group.subject = subject
 
-        page.subject_confidence = (
+        group.subject_confidence = (
             max(subject_scores.values())
         )
 
         document_type, doc_scores = (
             document_classifier.classify(
-                page.ocr_text
+                combined_text
             )
         )
 
-        page.document_type = (
-            document_type
+        group.document_type = document_type
+
+        group.document_type_confidence = (
+            max(doc_scores.values())
         )
 
-        page.document_type_confidence = (
-            max(doc_scores.values())
+        group.topics = (
+            topic_extractor.extract_topics(
+                combined_text
+            )
+        )
+
+        for page in group.pages:
+
+            page.subject = group.subject
+
+            page.subject_confidence = (
+                group.subject_confidence
+            )
+
+            page.document_type = (
+                group.document_type
+            )
+
+            page.document_type_confidence = (
+                group.document_type_confidence
+            )
+
+        page_numbers = [
+            p.page_number
+            for p in group.pages
+        ]
+
+        print()
+
+        print(
+            f"  Document Group {group_index}"
         )
 
         print()
 
         print(
-            f"Page {page.page_number}"
+            "  Pages:"
         )
 
         print(
-            f"Subject: {subject}"
+            f"  {page_numbers}"
+        )
+
+        print()
+
+        print(
+            "  Subject:"
         )
 
         print(
-            f"Type: {document_type}"
+            f"  {group.subject}"
+        )
+
+        print(
+            f"  Confidence: "
+            f"{group.subject_confidence}"
+        )
+
+        print()
+
+        print(
+            "  Type:"
+        )
+
+        print(
+            f"  {group.document_type}"
+        )
+
+        print(
+            f"  Type Confidence: "
+            f"{group.document_type_confidence}"
+        )
+
+        if group.topics:
+
+            print()
+
+            print(
+                "  Topics:"
+            )
+
+            for topic in group.topics:
+
+                print(f"  {topic}")
+
+    print()
+
+    for page in pages:
+
+        print(
+            f"  Page {page.page_number}"
+            f" -> {page.subject}"
         )
 
     # Export metadata
@@ -141,6 +257,7 @@ def main(config_path: str = None):
 
     report_generator.generate(
         pages,
+        groups,
         "data/output/report.json"
     )
 
