@@ -7,7 +7,8 @@ class ReportGenerator:
     def generate(
         self,
         pages,
-        output_path
+        groups=None,
+        output_path="data/output/report.json"
     ):
 
         subject_counts = Counter()
@@ -33,6 +34,25 @@ class ReportGenerator:
                 type_counts
             )
         }
+
+        if groups is not None:
+
+            report["groups"] = [
+                {
+                    "group_id": i + 1,
+                    "pages": [
+                        p.page_number
+                        for p in group.pages
+                    ],
+                    "subject": group.subject,
+                    "document_type":
+                        group.document_type,
+                    "topics": group.topics,
+                }
+                for i, group in enumerate(
+                    groups
+                )
+            ]
 
         with open(
             output_path,

@@ -1,4 +1,3 @@
-from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
 
 from classification.subject_loader import SubjectLoader
@@ -6,13 +5,13 @@ from classification.subject_loader import SubjectLoader
 
 class EmbeddingClassifier:
 
-    def __init__(self, config_path: str = None):
+    def __init__(
+        self,
+        model,
+        config_path: str = None,
+    ):
 
-        print("Loading embedding model...")
-
-        self.model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
+        self.model = model
 
         self.category_embeddings = {}
 
@@ -30,8 +29,6 @@ class EmbeddingClassifier:
                     convert_to_tensor=True
                 )
             )
-
-        print("Embedding model loaded.")
 
     def classify(
         self,
@@ -64,7 +61,7 @@ class EmbeddingClassifier:
 
         best_score = scores[best_category]
 
-        if best_score < 0.15:
+        if best_score < 0.35:
             return "Unknown", scores
 
         return best_category, scores
