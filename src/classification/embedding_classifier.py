@@ -1,50 +1,10 @@
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
 
+from classification.subject_loader import SubjectLoader
+
 
 class EmbeddingClassifier:
-
-    SUBJECT_DESCRIPTIONS = {
-        "Pharmacology":
-            """
-            Drugs, medicines, prescriptions, dosage,
-            pharmacokinetics, pharmacodynamics,
-            adverse effects, antibiotics,
-            antihypertensives, analgesics.
-            """,
-
-        "Pathology":
-            """
-            Disease mechanisms, inflammation,
-            necrosis, tumors, carcinoma,
-            histopathology, biopsy,
-            cell injury.
-            """,
-
-        "Microbiology":
-            """
-            Bacteria, viruses, fungi,
-            microorganisms, cultures,
-            gram staining, infection,
-            microbiological diagnosis.
-            """,
-
-        "Forensic Medicine":
-            """
-            Poisoning, autopsy,
-            postmortem examination,
-            injury, hanging,
-            asphyxia, medico-legal cases.
-            """,
-
-        "Community Medicine":
-            """
-            Epidemiology, public health,
-            vaccination, prevalence,
-            incidence, screening,
-            surveys, healthcare programs.
-            """
-    }
 
     def __init__(self):
 
@@ -56,8 +16,10 @@ class EmbeddingClassifier:
 
         self.subject_embeddings = {}
 
+        subject_descriptions = SubjectLoader.load()
+
         for subject, description in (
-            self.SUBJECT_DESCRIPTIONS.items()
+            subject_descriptions.items()
         ):
 
             self.subject_embeddings[subject] = (
