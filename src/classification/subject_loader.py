@@ -13,7 +13,7 @@ class SubjectLoader:
             config_path = str(
                 Path(__file__).resolve().parent.parent.parent
                 / "config"
-                / "subjects.json"
+                / "medical_subjects.json"
             )
 
         path = Path(config_path)
@@ -21,12 +21,12 @@ class SubjectLoader:
         if not path.exists():
 
             raise FileNotFoundError(
-                f"Subject configuration file not found: "
+                f"Category configuration file not found: "
                 f"{path.resolve()}"
             )
 
         with open(path, "r") as f:
 
-            subjects: Dict[str, str] = json.load(f)
+            categories: Dict[str, str] = json.load(f)
 
-        return subjects
+        return categories

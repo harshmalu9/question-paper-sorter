@@ -11,10 +11,6 @@ from classification.document_type_classifier import (
     DocumentTypeClassifier
 )
 
-from classification.subject_override import (
-    SubjectOverride
-)
-
 from organizer.page_organizer import (
     PageOrganizer
 )
@@ -32,7 +28,7 @@ from reporting.report_generator import (
 )
 
 
-def main():
+def main(config_path: str = None):
 
     processor = OCRProcessor()
 
@@ -41,40 +37,20 @@ def main():
     )
 
     subject_classifier = (
-        EmbeddingClassifier()
+        EmbeddingClassifier(config_path)
     )
 
     document_classifier = (
         DocumentTypeClassifier()
     )
 
-    override_classifier = (
-        SubjectOverride()
-    )
-
     for page in pages:
 
-        override_subject = (
-            override_classifier.classify(
+        subject, subject_scores = (
+            subject_classifier.classify(
                 page.ocr_text
             )
         )
-
-        if override_subject:
-
-            subject = override_subject
-
-            subject_scores = {
-                subject: 1.0
-            }
-
-        else:
-
-            subject, subject_scores = (
-                subject_classifier.classify(
-                    page.ocr_text
-                )
-            )
 
         page.subject = subject
 

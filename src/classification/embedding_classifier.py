@@ -6,7 +6,7 @@ from classification.subject_loader import SubjectLoader
 
 class EmbeddingClassifier:
 
-    def __init__(self):
+    def __init__(self, config_path: str = None):
 
         print("Loading embedding model...")
 
@@ -14,15 +14,17 @@ class EmbeddingClassifier:
             "all-MiniLM-L6-v2"
         )
 
-        self.subject_embeddings = {}
+        self.category_embeddings = {}
 
-        subject_descriptions = SubjectLoader.load()
+        category_descriptions = SubjectLoader.load(
+            config_path
+        )
 
-        for subject, description in (
-            subject_descriptions.items()
+        for category, description in (
+            category_descriptions.items()
         ):
 
-            self.subject_embeddings[subject] = (
+            self.category_embeddings[category] = (
                 self.model.encode(
                     description,
                     convert_to_tensor=True
@@ -44,25 +46,25 @@ class EmbeddingClassifier:
         scores = {}
 
         for (
-            subject,
-            subject_embedding
-        ) in self.subject_embeddings.items():
+            category,
+            category_embedding
+        ) in self.category_embeddings.items():
 
             similarity = cos_sim(
                 text_embedding,
-                subject_embedding
+                category_embedding
             ).item()
 
-            scores[subject] = similarity
+            scores[category] = similarity
 
-        best_subject = max(
+        best_category = max(
             scores,
             key=scores.get
         )
 
-        best_score = scores[best_subject]
+        best_score = scores[best_category]
 
         if best_score < 0.15:
             return "Unknown", scores
 
-        return best_subject, scores
+        return best_category, scores

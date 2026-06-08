@@ -21,7 +21,7 @@ def clean_temp():
     )
 
 
-def run(pdf_path: str):
+def run(pdf_path: str, config_path: str = None):
 
     clean_temp()
 
@@ -36,7 +36,7 @@ def run(pdf_path: str):
     print()
     print("Running pipeline...")
 
-    main()
+    main(config_path)
 
     print()
     print("Finished.")
@@ -44,12 +44,15 @@ def run(pdf_path: str):
 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
 
         print(
-            "Usage: python run.py <pdf>"
+            "Usage: python run.py <pdf> [config_file]"
         )
 
         sys.exit(1)
 
-    run(sys.argv[1])
+    pdf = sys.argv[1]
+    config = sys.argv[2] if len(sys.argv) == 3 else None
+
+    run(pdf, config)
