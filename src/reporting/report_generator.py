@@ -48,11 +48,60 @@ class ReportGenerator:
                     "document_type":
                         group.document_type,
                     "topics": group.topics,
+                    "top_topic":
+                        group.topics[0][0]
+                        if group.topics
+                        else None,
+                    "embedding_size":
+                        len(group.embedding)
+                        if group.embedding
+                        else None,
+                    "keyphrases":
+                        group.keyphrases,
+                    "cluster_id":
+                        group.cluster_id,
+                    "cluster_name":
+                        group.cluster_name,
                 }
                 for i, group in enumerate(
                     groups
                 )
             ]
+
+            clusters: dict[
+                int, dict
+            ] = {}
+
+            for i, group in enumerate(
+                groups
+            ):
+
+                cid = group.cluster_id
+
+                if cid is None:
+                    continue
+
+                if cid not in clusters:
+
+                    clusters[cid] = {
+                        "cluster_id": cid,
+                        "cluster_name":
+                            group.cluster_name,
+                        "groups": [],
+                    }
+
+                clusters[cid][
+                    "groups"
+                ].append(i + 1)
+
+            report["clusters"] = (
+                sorted(
+                    clusters.values(),
+                    key=lambda x: x[
+                        "cluster_id"
+                    ],
+                )
+            )
 
         with open(
             output_path,

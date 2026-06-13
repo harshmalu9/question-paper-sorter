@@ -23,6 +23,10 @@ from discovery.topic_extractor import (
     TopicExtractor
 )
 
+from discovery.keyphrase_extractor import (
+    KeyphraseExtractor
+)
+
 from organizer.page_organizer import (
     PageOrganizer
 )
@@ -37,6 +41,22 @@ from exporters.metadata_exporter import (
 
 from reporting.report_generator import (
     ReportGenerator
+)
+
+from embeddings.document_embedding_generator import (
+    DocumentEmbeddingGenerator
+)
+
+from embeddings.similarity import (
+    cosine_similarity
+)
+
+from clustering.document_clusterer import (
+    DocumentClusterer
+)
+
+from clustering.cluster_namer import (
+    ClusterNamer
 )
 
 
@@ -56,6 +76,12 @@ def main(config_path: str = None):
 
     print("Embedding model loaded.")
 
+    embedding_generator = (
+        DocumentEmbeddingGenerator(
+            model=model
+        )
+    )
+
     subject_classifier = (
         EmbeddingClassifier(
             model=model,
@@ -72,6 +98,8 @@ def main(config_path: str = None):
     )
 
     topic_extractor = TopicExtractor()
+
+    keyphrase_extractor = KeyphraseExtractor()
 
     groups = detector.detect(pages)
 
@@ -113,6 +141,20 @@ def main(config_path: str = None):
                 combined_text
             )
         )
+
+        group.keyphrases = (
+            keyphrase_extractor.extract_keyphrases(
+                combined_text
+            )
+        )
+
+        embedding = (
+            embedding_generator.generate(
+                combined_text
+            )
+        )
+
+        group.embedding = embedding.tolist()
 
         for page in group.pages:
 
@@ -189,11 +231,131 @@ def main(config_path: str = None):
                 "  Topics:"
             )
 
-            for topic in group.topics:
+            for topic, _ in group.topics:
 
                 print(f"  {topic}")
 
+        if group.keyphrases:
+
+            print()
+
+            print(
+                "  Keyphrases:"
+            )
+
+            for phrase, _ in (
+                group.keyphrases
+            ):
+
+                print(f"  {phrase}")
+
     print()
+
+    print("Similarity Analysis:")
+    print()
+    for i, group in enumerate(groups):
+        similarities = []
+        for j, other in enumerate(groups):
+            if i == j:
+                continue
+            score = cosine_similarity(
+                group.embedding,
+                other.embedding,
+            )
+            similarities.append((j + 1, score))
+        similarities.sort(
+            key=lambda x: x[1],
+            reverse=True,
+        )
+        top3 = similarities[:3]
+        print(
+            f"  Document Group {i + 1}"
+        )
+        print()
+        print(
+            "    Most Similar:"
+        )
+        print()
+        for group_id, score in top3:
+            print(
+                f"      Group {group_id}"
+            )
+            print(
+                f"      Similarity: "
+                f"{score:.2f}"
+            )
+            print()
+    clusterer = DocumentClusterer()
+
+    groups = clusterer.cluster(groups)
+
+    namer = ClusterNamer()
+
+    groups = namer.name_clusters(groups)
+
+    print()
+
+    cluster_ids = sorted(
+        set(
+            g.cluster_id
+            for g in groups
+        )
+    )
+
+    for cluster_id in cluster_ids:
+
+        cluster_groups = [
+            g for g in groups
+            if g.cluster_id == cluster_id
+        ]
+
+        name = (
+            cluster_groups[0].cluster_name
+        )
+
+        group_numbers = [
+            i + 1
+            for i, g in enumerate(groups)
+            if g.cluster_id == cluster_id
+        ]
+
+        print(
+            "--------------------------------"
+            "------------------"
+        )
+
+        print()
+
+        print(
+            f"  Cluster {cluster_id}"
+        )
+
+        print()
+
+        print(
+            "  Name:"
+        )
+
+        print(
+            f"  {name}"
+        )
+
+        print()
+
+        print(
+            "  Groups:"
+        )
+
+        for gn in group_numbers:
+
+            print(f"  {gn}")
+
+        print()
+
+    print(
+        "--------------------------------"
+        "------------------"
+    )
 
     for page in pages:
 

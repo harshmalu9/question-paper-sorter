@@ -19,3 +19,13 @@ class DocumentGroup:
     topics: list[str] = field(
         default_factory=list
     )
+
+    embedding: list[float] | None = None
+
+    keyphrases: list[tuple[str, int]] = field(
+        default_factory=list
+    )
+
+    cluster_id: int | None = None
+
+    cluster_name: str | None = None

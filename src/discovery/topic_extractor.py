@@ -21,14 +21,63 @@ STOPWORDS = {
     "must", "may", "can", "get", "way", "work", "form",
 }
 
+ACADEMIC_STOPWORDS = {
+    "marks",
+    "mark",
+    "question",
+    "questions",
+    "paper",
+    "answer",
+    "answers",
+    "write",
+    "short",
+    "long",
+    "following",
+    "describe",
+    "explain",
+    "discuss",
+    "give",
+    "mention",
+    "attempt",
+    "section",
+    "part",
+    "number",
+    "medical",
+    "college",
+    "year",
+    "syllabus",
+    "your",
+    "anything",
+}
+
 
 class TopicExtractor:
+
+    def _is_valid_word(
+        self,
+        word: str,
+    ) -> bool:
+
+        if len(word) < 4:
+            return False
+
+        if any(c.isdigit() for c in word):
+            return False
+
+        alpha = sum(
+            1 for c in word if c.isalpha()
+        )
+
+        if alpha / len(word) < 0.5:
+            return False
+
+        return True
 
     def extract_topics(
         self,
         text: str,
         top_n: int = 10,
-    ) -> list[str]:
+    ) -> list[tuple[str, int]]:
 
         text = text.lower()
 
@@ -43,23 +92,21 @@ class TopicExtractor:
         words = [
             w for w in words
             if w not in STOPWORDS
-            and len(w) >= 4
+            and w not in ACADEMIC_STOPWORDS
+            and self._is_valid_word(w)
         ]
 
         counts = Counter(words)
 
-        return [
-            word
-            for word, _ in counts.most_common(
-                top_n
-            )
-        ]
+        return counts.most_common(
+            top_n
+        )
 
     def extract_keywords(
         self,
         text: str,
         top_n: int = 10,
-    ) -> list[str]:
+    ) -> list[tuple[str, int]]:
 
         return self.extract_topics(
             text, top_n
