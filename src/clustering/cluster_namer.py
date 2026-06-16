@@ -4,6 +4,20 @@ from models.document_group import (
     DocumentGroup,
 )
 
+GENERIC_PHRASES = {
+    "drug",
+    "drugs",
+    "case",
+    "patient",
+    "distribution",
+    "uses",
+    "action",
+    "mechanism",
+    "theory",
+    "practical",
+    "question"
+}
+
 
 class ClusterNamer:
 
@@ -35,25 +49,72 @@ class ClusterNamer:
             for g in cluster_groups:
 
                 for phrase, score in (
-                    g.keyphrases
+                    g.topics
                 ):
 
                     phrase_counter[
                         phrase
                     ] += score
 
+            scored_phrases = []
+
+            for phrase, freq in (
+                phrase_counter.items()
+            ):
+
+                if (
+                    phrase.lower()
+                    in GENERIC_PHRASES
+                ):
+                    continue
+
+                words = phrase.split()
+                score = freq * len(words)
+                scored_phrases.append(
+                    (phrase, score)
+                )
+
+            scored_phrases.sort(
+                key=lambda x: x[1],
+                reverse=True,
+            )
+
             top_phrases = [
-                phrase.replace(
-                    " ", "_"
-                )
-                for phrase, _ in (
-                    phrase_counter.most_common(
-                        3
-                    )
-                )
+                phrase
+                for phrase, _ in
+                scored_phrases[:3]
             ]
 
-            name = "_".join(top_phrases)
+            if top_phrases:
+
+                name = "_".join(
+                    p.replace(" ", "_")
+                    for p in top_phrases
+                )
+
+                if len(name) > 60:
+                    name = name[:60]
+
+            else:
+                name = (
+                    f"cluster_{cluster_id}"
+                )
+
+            print()
+            print(
+                "Cluster naming candidates:"
+            )
+            for phrase, score in (
+                scored_phrases[:10]
+            ):
+                print(
+                    f"  {phrase}: {score}"
+                )
+
+            print(
+                f"Final cluster name: "
+                f"{name}"
+            )
 
             for g in cluster_groups:
 

@@ -19,12 +19,8 @@ from segmentation.document_boundary_detector import (
     DocumentBoundaryDetector
 )
 
-from discovery.topic_extractor import (
-    TopicExtractor
-)
-
-from discovery.keyphrase_extractor import (
-    KeyphraseExtractor
+from topicing.semantic_topic_extractor import (
+    SemanticTopicExtractor
 )
 
 from organizer.page_organizer import (
@@ -97,9 +93,9 @@ def main(config_path: str = None):
         model=model
     )
 
-    topic_extractor = TopicExtractor()
-
-    keyphrase_extractor = KeyphraseExtractor()
+    semantic_extractor = (
+        SemanticTopicExtractor()
+    )
 
     groups = detector.detect(pages)
 
@@ -136,17 +132,15 @@ def main(config_path: str = None):
             max(doc_scores.values())
         )
 
-        group.topics = (
-            topic_extractor.extract_topics(
+        topics = (
+            semantic_extractor.extract(
                 combined_text
             )
         )
 
-        group.keyphrases = (
-            keyphrase_extractor.extract_keyphrases(
-                combined_text
-            )
-        )
+        group.topics = topics
+
+        group.keyphrases = topics
 
         embedding = (
             embedding_generator.generate(
