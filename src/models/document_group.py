@@ -29,3 +29,5 @@ class DocumentGroup:
     cluster_id: int | None = None
 
     cluster_name: str | None = None
+
+    raw_text: str | None = None

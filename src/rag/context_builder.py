@@ -1,69 +1,86 @@
-import json
+import re
 
-from pathlib import Path
+
+def _extract_keywords(query: str) -> list[str]:
+
+    stop_words = {
+        "what",
+        "were",
+        "about",
+        "find",
+        "list",
+        "topics",
+        "questions",
+        "question",
+        "asked",
+        "give",
+        "tell",
+        "show",
+        "get",
+        "the",
+        "and",
+        "for",
+        "are",
+        "was",
+        "is",
+        "can",
+        "how",
+        "why",
+        "does",
+        "do",
+        "did",
+    }
+
+    words = re.findall(
+        r"[a-zA-Z]+", query.lower()
+    )
+
+    return [
+        w
+        for w in words
+        if w not in stop_words
+        and len(w) > 2
+    ]
+
+
+def _filter_ocr_lines(
+    raw_text: str, keywords: list[str]
+) -> str:
+
+    if not raw_text:
+        return ""
+
+    if not keywords:
+        return raw_text[:5000]
+
+    lines = raw_text.split("\n")
+
+    matching = [
+        line
+        for line in lines
+        if any(
+            kw in line.lower()
+            for kw in keywords
+        )
+    ]
+
+    if matching:
+        return "\n".join(matching)
+
+    return raw_text[:5000]
 
 
 class ContextBuilder:
 
-    def __init__(
-        self, pages_path: str = None
-    ):
-
-        self._page_map = {}
-
-        if pages_path is not None:
-            self._load_pages(pages_path)
-
-    def _load_pages(
-        self, pages_path: str
-    ) -> None:
-
-        path = Path(pages_path)
-
-        if not path.exists():
-            return
-
-        with open(path) as f:
-            pages = json.load(f)
-
-        for p in pages:
-            self._page_map[
-                p["page_number"]
-            ] = p.get("ocr_text", "")
-
-    def _get_ocr_snippet(
-        self, group: dict
-    ) -> str:
-
-        page_numbers = group.get(
-            "pages", []
-        )
-
-        texts = []
-
-        for num in page_numbers:
-
-            text = self._page_map.get(
-                num
-            )
-
-            if text:
-                texts.append(text)
-
-        if not texts:
-            return ""
-
-        combined = "\n".join(texts)
-
-        if len(combined) > 1000:
-            combined = combined[:1000]
-
-        return combined
-
     def build(
-        self, groups: list[dict]
+        self,
+        groups: list[dict],
+        query: str = "",
     ) -> str:
 
+        keywords = (
+            _extract_keywords(query)
+        )
         parts = []
 
         for g in groups:
@@ -77,11 +94,19 @@ class ContextBuilder:
                 "Unknown",
             )
             topics = g.get("topics", [])
-            keyphrases = g.get(
-                "keyphrases", []
-            )
-            ocr = self._get_ocr_snippet(g)
+            raw_text = g.get(
+                "raw_text"
+            ) or ""
 
+            ocr_excerpt = (
+                _filter_ocr_lines(
+                    raw_text, keywords
+                )
+            )
+
+            parts.append(
+                "----------------------------------"
+            )
             parts.append(
                 f"Group {group_id}"
             )
@@ -104,26 +129,16 @@ class ContextBuilder:
                         f"- {phrase}"
                     )
 
-            if keyphrases:
+            if ocr_excerpt:
                 parts.append(
-                    "Keyphrases:"
+                    "OCR TEXT:"
                 )
-
-                for phrase, _ in (
-                    keyphrases[:10]
-                ):
-                    parts.append(
-                        f"- {phrase}"
-                    )
-
-            if ocr:
                 parts.append(
-                    "OCR:"
+                    ocr_excerpt
                 )
-                parts.append(ocr)
 
             parts.append(
-                "----------"
+                "----------------------------------"
             )
 
         return "\n".join(parts)

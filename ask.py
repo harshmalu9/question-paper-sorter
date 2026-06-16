@@ -6,7 +6,10 @@ from rag.retriever import Retriever
 from rag.context_builder import (
     ContextBuilder,
 )
-from rag.qa_engine import QAEngine
+from rag.llm_engine import (
+    LLMEngine,
+    PROMPT_TEMPLATE,
+)
 
 REPORT_PATH = "data/output/report.json"
 PAGES_PATH = "data/output/pages.json"
@@ -36,15 +39,19 @@ def main():
         query, top_k=5
     )
 
-    builder = ContextBuilder(
-        pages_path=PAGES_PATH
+    builder = ContextBuilder()
+
+    context = builder.build(
+        results, query=query
     )
 
-    context = builder.build(results)
+    engine = LLMEngine()
 
-    engine = QAEngine()
+    full_prompt = PROMPT_TEMPLATE.format(
+        query=query, context=context
+    )
 
-    answer = engine.answer(
+    answer = engine.generate_answer(
         query, context
     )
 
@@ -56,6 +63,12 @@ def main():
     print(sep)
     print()
     print(query)
+    print()
+    print(sep)
+    print("Full Prompt Sent to LLM")
+    print(sep)
+    print()
+    print(full_prompt)
     print()
     print(sep)
     print("Answer")

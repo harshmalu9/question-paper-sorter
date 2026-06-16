@@ -42,6 +42,12 @@ Use ONLY the provided context.
 Answer ONLY information directly relevant to the user question.
 Ignore unrelated sections even if present in context.
 
+Important:
+Extract exact questions if present.
+Do not infer or hallucinate missing questions.
+Only quote text explicitly present in OCR.
+If OCR is noisy, say so.
+
 If answer is not present, reply:
 "Answer not found in documents."
 

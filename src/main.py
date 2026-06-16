@@ -108,6 +108,8 @@ def main(config_path: str = None):
             for page in group.pages
         )
 
+        group.raw_text = combined_text
+
         subject, subject_scores = (
             subject_classifier.classify(
                 combined_text

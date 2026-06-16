@@ -62,6 +62,10 @@ class ReportGenerator:
                         group.cluster_id,
                     "cluster_name":
                         group.cluster_name,
+                    "raw_text":
+                        group.raw_text
+                        if group.raw_text
+                        else None,
                 }
                 for i, group in enumerate(
                     groups
