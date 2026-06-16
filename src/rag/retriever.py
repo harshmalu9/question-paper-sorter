@@ -76,4 +76,37 @@ class Retriever:
             reverse=True,
         )
 
-        return retrieved
+        if not retrieved:
+            return []
+
+        best_score = retrieved[0]["_score"]
+        threshold = max(
+            0.35, best_score * 0.85
+        )
+
+        filtered = [
+            g
+            for g in retrieved
+            if g["_score"] >= threshold
+        ]
+
+        print()
+        print(
+            f"Best score: "
+            f"{best_score:.2f}"
+        )
+        print(
+            f"Threshold: "
+            f"{threshold:.2f}"
+        )
+        print(
+            "Filtered groups:"
+        )
+
+        for g in filtered:
+            print(
+                f"  - Group "
+                f"{g.get('group_id')}"
+            )
+
+        return filtered
