@@ -38,10 +38,12 @@ def process(
     )
 
     if ext == ".pdf":
+        is_pdf = True
         image_paths = load_pdf(
             input_path, temp_dir
         )
     elif ext == ".zip":
+        is_pdf = False
         image_paths = load_zip(
             input_path, temp_dir
         )
@@ -95,7 +97,9 @@ def process(
                 f"{g.grouping_confidence}"
             )
 
-    groups = reorder_groups(groups)
+    groups = reorder_groups(
+        groups, is_pdf=is_pdf
+    )
 
     out_path = Path(output_dir)
     out_path.mkdir(
@@ -126,6 +130,3 @@ def process(
         )
 
     return groups, pdf_paths
-
-
-

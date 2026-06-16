@@ -22,8 +22,6 @@ BOUNDARY_KEYWORDS = {
     "supplementary examination": 2,
 }
 
-MIN_GROUP_SIZE = 3
-
 
 class BoundaryDetector:
 
@@ -128,11 +126,15 @@ class BoundaryDetector:
             bscore = boundary_scores[i]
             sim = sims[i - 1]
 
-            should_split = False
+            should_split = (
+                bscore >= 3
+                and len(current) >= 3
+            )
 
             if (
-                bscore >= 3
-                and len(current) >= MIN_GROUP_SIZE
+                not should_split
+                and sim < 0.010
+                and len(current) >= 4
             ):
                 should_split = True
 

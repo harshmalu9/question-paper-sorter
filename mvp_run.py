@@ -16,6 +16,13 @@ import argparse
 from mvp.pipeline import process
 
 
+_ZIP_WARNING = (
+    "[WARNING] Random page reordering "
+    "is not fully supported yet. "
+    "Best results with mostly ordered pages."
+)
+
+
 def main():
 
     parser = argparse.ArgumentParser(
@@ -52,6 +59,15 @@ def main():
     )
 
     args = parser.parse_args()
+
+    ext = (
+        Path(args.input)
+        .suffix
+        .lower()
+    )
+
+    if ext == ".zip":
+        print(_ZIP_WARNING)
 
     process(
         input_path=args.input,

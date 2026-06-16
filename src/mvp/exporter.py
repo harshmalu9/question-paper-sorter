@@ -7,6 +7,9 @@ from PIL import Image
 from mvp.models import MVPPGroup
 
 
+_PAGE_REORDERING_SUPPORTED = False
+
+
 def export_group(
     group: MVPPGroup,
     output_dir: str = "output",
@@ -86,9 +89,16 @@ def export_metadata(
 
         payload.append(entry)
 
+    data = {
+        "page_reordering_supported": (
+            _PAGE_REORDERING_SUPPORTED
+        ),
+        "groups": payload,
+    }
+
     metadata_path.write_text(
         json.dumps(
-            payload,
+            data,
             indent=2,
             default=str,
         )
