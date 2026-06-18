@@ -5,7 +5,7 @@
       "group_id": 1,
       "num_pages": 4,
       "grouping_confidence": 0.5,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 1,
@@ -29,7 +29,7 @@
       "group_id": 2,
       "num_pages": 3,
       "grouping_confidence": 0.52,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 5,
@@ -49,7 +49,7 @@
       "group_id": 3,
       "num_pages": 3,
       "grouping_confidence": 0.5,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 8,
@@ -69,7 +69,7 @@
       "group_id": 4,
       "num_pages": 5,
       "grouping_confidence": 0.74,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 11,
@@ -97,7 +97,7 @@
       "group_id": 5,
       "num_pages": 5,
       "grouping_confidence": 0.74,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 16,
@@ -125,7 +125,7 @@
       "group_id": 6,
       "num_pages": 11,
       "grouping_confidence": 0.87,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 21,
@@ -177,7 +177,7 @@
       "group_id": 7,
       "num_pages": 12,
       "grouping_confidence": 0.9,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 32,
@@ -233,7 +233,7 @@
       "group_id": 8,
       "num_pages": 6,
       "grouping_confidence": 0.75,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 44,
@@ -265,7 +265,7 @@
       "group_id": 9,
       "num_pages": 3,
       "grouping_confidence": 0.53,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 50,
@@ -285,7 +285,7 @@
       "group_id": 10,
       "num_pages": 3,
       "grouping_confidence": 0.52,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 53,
@@ -305,7 +305,7 @@
       "group_id": 11,
       "num_pages": 9,
       "grouping_confidence": 0.73,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 56,
@@ -349,7 +349,7 @@
       "group_id": 12,
       "num_pages": 4,
       "grouping_confidence": 0.59,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 65,
@@ -373,7 +373,7 @@
       "group_id": 13,
       "num_pages": 1,
       "grouping_confidence": 0.95,
-      "ordering_confidence": 1.0,
+      "ordering_confidence": 0.5,
       "pages": [
         {
           "index": 69,
