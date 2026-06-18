@@ -84,3 +84,11 @@ build/
 # ==================================================
 *.swp
 *.swo
+
+venv/
+**pycache**/
+*.pyc
+
+data/temp/
+data/cache/
+output/
