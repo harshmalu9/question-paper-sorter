@@ -4,9 +4,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.config import settings
-from app.api.v1.upload import router as upload_router
-from app.api.v1.health import router as health_router
+from backend.app.core.config import settings
+from backend.app.api.v1.upload import router as upload_router
+from backend.app.api.v1.health import router as health_router
+from backend.app.api.v1.jobs import router as jobs_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -24,6 +25,7 @@ app.add_middleware(
 # Versioned API routes
 app.include_router(health_router, prefix=settings.API_PREFIX)
 app.include_router(upload_router, prefix=settings.API_PREFIX)
+app.include_router(jobs_router, prefix=settings.API_PREFIX)
 
 
 @app.get("/")

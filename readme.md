@@ -81,7 +81,7 @@ question-paper-sorter/
 │   ├── cache/
 │   └── output/
 │
-├── src/
+├── engine/
 │   ├── ocr/
 │   ├── classification/
 │   ├── preprocessing/
@@ -89,11 +89,20 @@ question-paper-sorter/
 │   ├── pdf/
 │   ├── reporting/
 │   ├── models/
-│   └── exporters/
+│   ├── exporters/
+│   ├── product/
+│   └── mvp/
 │
-├── run.py
+├── backend/
+│   └── app/
+│       ├── api/
+│       ├── core/
+│       ├── jobs/
+│       └── services/
+│
+├── main.py
 ├── requirements.txt
-└── README.md
+└── readme.md
 ```
 
 ---
@@ -147,8 +156,18 @@ data/input/
 Run:
 
 ```bash
-python run.py data/input/sample.pdf
+python main.py data/input/sample.pdf
 ```
+
+### Running the Backend
+
+The FastAPI backend must be started from the repository root:
+
+```bash
+uvicorn backend.app.main:app --reload
+```
+
+This ensures all imports resolve correctly. Do not start the backend from inside the `backend/` directory.
 
 ---
 

@@ -1,19 +1,8 @@
 #!/usr/bin/env python3
 
-import sys
-from pathlib import Path
-
-sys.path.insert(
-    0,
-    str(
-        Path(__file__).resolve().parent
-        / "src"
-    ),
-)
-
 import argparse
 
-from mvp.pipeline import process
+from engine.mvp.pipeline import process
 
 
 _ZIP_WARNING = (

@@ -6,17 +6,10 @@ Usage:
     python main.py <input.zip>
 """
 
-import sys
+import argparse
 from pathlib import Path
 
-sys.path.insert(
-    0,
-    str(Path(__file__).resolve().parent / "src"),
-)
-
-import argparse
-
-from product.pipeline import process
+from engine.product.pipeline import process
 
 _ZIP_WARNING = (
     "[WARNING] ZIP uploads preserve image "

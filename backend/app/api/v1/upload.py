@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
-from app.core.config import settings
+from backend.app.core.config import settings
 
 router = APIRouter()
 

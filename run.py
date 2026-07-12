@@ -1,10 +1,7 @@
-import sys
 import shutil
 from pathlib import Path
 
-sys.path.append("src")
-
-from ocr.pdf_loader import pdf_to_images
+from engine.ocr.pdf_loader import pdf_to_images
 from main import main
 
 
