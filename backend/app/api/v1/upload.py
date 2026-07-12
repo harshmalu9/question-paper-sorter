@@ -1,17 +1,16 @@
 # Upload route — accepts .pdf / .zip files,
-# saves them to backend/uploads/, returns filename + size.
+# saves them to the configured upload directory,
+# returns filename + size.
 
 from pathlib import Path
 
 from fastapi import APIRouter, UploadFile, File, HTTPException
 
+from app.core.config import settings
+
 router = APIRouter()
 
-# Resolve upload directory relative to this file:
-# backend/app/routes/upload.py -> backend/uploads/
-UPLOAD_DIR = (
-    Path(__file__).resolve().parent.parent.parent / "uploads"
-)
+UPLOAD_DIR = Path(settings.UPLOAD_DIR)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {".pdf", ".zip"}
