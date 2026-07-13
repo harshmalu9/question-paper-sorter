@@ -10,83 +10,79 @@ const steps = [
   { label: "Completed", status: "pending" as const },
 ];
 
+const stats = [
+  { label: "Current File", value: "exam_2024.pdf" },
+  { label: "Pages Processed", value: "24 / 69" },
+  { label: "OCR Confidence", value: "94%" },
+  { label: "Groups Found", value: "3" },
+  { label: "Estimated Time", value: "~1 min 42 sec" },
+];
+
 export default function Processing() {
   return (
-    <div className="px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-xl">
+    <div className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-2xl animate-fade-in">
         {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+        <div className="mb-10 text-center">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <div className="h-4 w-4 rounded-full bg-primary animate-pulse" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Processing your files
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground">
             This usually takes 1–3 minutes depending on file size.
           </p>
         </div>
 
         {/* Main card */}
-        <Card>
+        <Card className="overflow-hidden">
           <CardContent className="p-6 sm:p-8">
             {/* Progress bar */}
             <div className="mb-8">
-              <div className="mb-2 flex items-center justify-between text-sm">
+              <div className="mb-2.5 flex items-center justify-between text-sm">
                 <span className="font-medium text-foreground">
                   Overall Progress
                 </span>
-                <span className="text-muted-foreground">35%</span>
+                <span className="font-semibold text-primary">35%</span>
               </div>
               <Progress value={35} />
             </div>
 
-            {/* Two-column layout */}
+            {/* Desktop: horizontal timeline */}
+            <div className="mb-8 hidden sm:block">
+              <ProgressTimeline steps={steps} orientation="horizontal" />
+            </div>
+
+            {/* Content grid */}
             <div className="grid gap-8 sm:grid-cols-2">
-              {/* Timeline */}
-              <div>
+              {/* Mobile: vertical timeline */}
+              <div className="sm:hidden">
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Pipeline
                 </h3>
-                <ProgressTimeline steps={steps} />
+                <ProgressTimeline steps={steps} orientation="vertical" />
               </div>
 
               {/* Stats */}
-              <div className="space-y-5">
+              <div className="space-y-4">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Details
                 </h3>
-
-                <div>
-                  <p className="text-xs text-muted-foreground">Current file</p>
-                  <p className="mt-0.5 text-sm font-medium text-foreground">
-                    exam_2024.pdf
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-xs text-muted-foreground">Current page</p>
-                  <p className="mt-0.5 text-sm font-medium text-foreground">
-                    24 / 69
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-xs text-muted-foreground">
-                    Estimated remaining
-                  </p>
-                  <p className="mt-0.5 text-sm font-medium text-foreground">
-                    ~1 min 42 sec
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-xs text-muted-foreground">
-                    Pages processed
-                  </p>
-                  <p className="mt-0.5 text-sm font-medium text-foreground">
-                    24 of 69
-                  </p>
+                <div className="space-y-3">
+                  {stats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="flex items-center justify-between rounded-lg bg-muted/50 px-4 py-3"
+                    >
+                      <span className="text-sm text-muted-foreground">
+                        {stat.label}
+                      </span>
+                      <span className="text-sm font-medium text-foreground">
+                        {stat.value}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

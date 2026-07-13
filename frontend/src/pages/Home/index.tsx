@@ -7,7 +7,7 @@ const features = [
     icon: <FiCpu className="h-6 w-6" />,
     title: "OCR Powered",
     description:
-      "Advanced text recognition extracts content from scanned pages with automatic rotation correction and caching.",
+      "Advanced text recognition extracts content from scanned pages with automatic rotation correction and intelligent caching.",
   },
   {
     icon: <FiLayers className="h-6 w-6" />,
@@ -26,9 +26,9 @@ const features = [
 export default function Home() {
   return (
     <>
-      {/* Hero */}
-      <section className="px-4 pt-20 pb-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
+      {/* Hero — fits first viewport on desktop */}
+      <section className="px-4 pt-24 pb-8 sm:px-6 sm:pt-32 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center animate-slide-up">
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Separate Mixed Question Papers{" "}
             <span className="text-primary">Automatically</span>
@@ -40,15 +40,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Upload */}
-      <section className="px-4 pb-20 sm:px-6 lg:px-8">
+      {/* Upload — visual focus */}
+      <section className="px-4 pb-24 sm:px-6 lg:px-8">
         <UploadCard />
       </section>
 
       {/* Features */}
-      <section className="border-t border-border bg-muted/30 px-4 py-20 sm:px-6 lg:px-8">
+      <section className="border-t border-border bg-muted/30 px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-12 text-center">
+          <div className="mb-14 text-center">
             <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               Built for accuracy
             </h2>

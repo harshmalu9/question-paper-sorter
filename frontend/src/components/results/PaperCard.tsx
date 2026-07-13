@@ -17,11 +17,11 @@ export default function PaperCard({
   const confidencePercent = Math.round(confidence * 100);
 
   return (
-    <Card className="group transition-shadow hover:shadow-md">
+    <Card className="group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
       <CardContent className="p-5">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors duration-200 group-hover:bg-primary/15">
               <FiFileText className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -31,16 +31,16 @@ export default function PaperCard({
               </p>
             </div>
           </div>
-          <Badge variant={confidencePercent >= 80 ? "success" : "warning"}>
-            {confidencePercent}% confidence
-          </Badge>
-        </div>
 
-        <div className="mt-4 flex justify-end">
-          <Button variant="outline" size="sm">
-            <FiDownload className="h-3.5 w-3.5" />
-            Download PDF
-          </Button>
+          <div className="flex items-center gap-3 pl-13 sm:pl-0">
+            <Badge variant={confidencePercent >= 80 ? "success" : "warning"}>
+              {confidencePercent}%
+            </Badge>
+            <Button variant="outline" size="sm">
+              <FiDownload className="h-3.5 w-3.5" />
+              Download
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

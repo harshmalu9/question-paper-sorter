@@ -10,14 +10,16 @@ const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     <div
       ref={ref}
       className={cn(
-        "relative h-2 w-full overflow-hidden rounded-full bg-primary/20",
+        "relative h-2.5 w-full overflow-hidden rounded-full bg-primary/15",
         className,
       )}
       {...props}
     >
       <div
-        className="h-full w-full flex-1 rounded-full bg-primary transition-all duration-500 ease-out"
-        style={{ transform: `translateX(-${100 - Math.min(100, Math.max(0, value))}%)` }}
+        className="h-full rounded-full bg-primary transition-all duration-700 ease-out"
+        style={{
+          width: `${Math.min(100, Math.max(0, value))}%`,
+        }}
       />
     </div>
   ),
