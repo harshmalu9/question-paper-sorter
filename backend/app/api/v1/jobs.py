@@ -50,7 +50,7 @@ def _process_job(job_id: str, input_path: str, output_dir: str):
             job_id, 65, "Grouping pages"
         )
 
-        run_pipeline(
+        pdf_files, meta_file = run_pipeline(
             input_path=input_path,
             output_dir=output_dir,
         )
@@ -59,7 +59,13 @@ def _process_job(job_id: str, input_path: str, output_dir: str):
             job_id, 90, "Exporting PDFs"
         )
 
-        job_manager.complete_job(job_id)
+        # Store result filenames so the results endpoint
+        # can serve them without scanning the output dir.
+        job_manager.complete_job(
+            job_id,
+            result_files=pdf_files,
+            metadata_file=meta_file,
+        )
 
     except Exception as exc:
         job_manager.fail_job(job_id, str(exc))

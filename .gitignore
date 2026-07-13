@@ -92,3 +92,15 @@ venv/
 data/temp/
 data/cache/
 output/akdnf;
+
+# Generated outputs
+output/
+output2/
+data/temp/
+
+# Backend uploads
+backend/uploads/
+
+# Python
+__pycache__/
+*.py[cod]

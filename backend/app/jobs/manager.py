@@ -45,8 +45,18 @@ class JobManager:
         job.message = message
         job.status = JobStatus.PROCESSING
 
-    def complete_job(self, job_id: str) -> None:
-        """Mark a job as completed."""
+    def complete_job(
+        self,
+        job_id: str,
+        result_files: Optional[list[str]] = None,
+        metadata_file: str = "",
+    ) -> None:
+        """Mark a job as completed.
+
+        Stores the list of generated PDF filenames and the
+        metadata.json filename so result retrieval endpoints
+        can serve them without scanning the output directory.
+        """
         job = self._jobs.get(job_id)
         if job is None:
             return
@@ -54,6 +64,8 @@ class JobManager:
         job.progress = 100
         job.message = "Completed"
         job.finished_at = datetime.now(timezone.utc)
+        job.result_files = result_files or []
+        job.metadata_file = metadata_file
 
     def fail_job(
         self, job_id: str, error: str

@@ -8,6 +8,8 @@ from backend.app.core.config import settings
 from backend.app.api.v1.upload import router as upload_router
 from backend.app.api.v1.health import router as health_router
 from backend.app.api.v1.jobs import router as jobs_router
+from backend.app.api.v1.results import router as results_router
+from backend.app.api.v1.download import router as download_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -26,6 +28,8 @@ app.add_middleware(
 app.include_router(health_router, prefix=settings.API_PREFIX)
 app.include_router(upload_router, prefix=settings.API_PREFIX)
 app.include_router(jobs_router, prefix=settings.API_PREFIX)
+app.include_router(results_router, prefix=settings.API_PREFIX)
+app.include_router(download_router, prefix=settings.API_PREFIX)
 
 
 @app.get("/")

@@ -28,6 +28,10 @@ class Job:
     )
     finished_at: Optional[datetime] = None
     error: Optional[str] = None
+    result_files: list[str] = field(
+        default_factory=list,
+    )
+    metadata_file: str = ""
 
     def to_dict(self) -> dict:
         """Serialize job to a JSON-friendly dict."""
@@ -45,4 +49,6 @@ class Job:
                 else None
             ),
             "error": self.error,
+            "result_files": self.result_files,
+            "metadata_file": self.metadata_file,
         }
