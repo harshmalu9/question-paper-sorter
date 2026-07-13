@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FiGithub } from "react-icons/fi";
+import { FiGithub, FiLayers } from "react-icons/fi";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -8,21 +8,23 @@ const navLinks = [
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-40 border-b border-surface-200 bg-white/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link
-          to="/"
-          className="text-lg font-semibold text-surface-800"
-        >
-          Question Paper Sorter
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <FiLayers className="h-4 w-4" />
+          </div>
+          <span className="text-base font-semibold text-foreground">
+            Question Paper Sorter
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               to={link.href}
-              className="text-sm font-medium text-surface-500 transition-colors hover:text-surface-800"
+              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               {link.label}
             </Link>
@@ -31,10 +33,10 @@ export default function Navbar() {
             href="https://github.com/harshmalu9/question-paper-sorter"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-surface-500 transition-colors hover:text-surface-800"
-            aria-label="GitHub"
+            className="ml-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           >
-            <FiGithub size={20} />
+            <FiGithub className="h-4 w-4" />
+            <span className="hidden sm:inline">GitHub</span>
           </a>
         </nav>
       </div>

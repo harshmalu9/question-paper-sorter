@@ -1,50 +1,68 @@
-import Section from "@/components/common/Section";
-import Card from "@/components/common/Card";
+import { FiCpu, FiLayers, FiFileText } from "react-icons/fi";
+import UploadCard from "@/components/upload/UploadCard";
+import FeatureCard from "@/components/common/FeatureCard";
+
+const features = [
+  {
+    icon: <FiCpu className="h-6 w-6" />,
+    title: "OCR Powered",
+    description:
+      "Advanced text recognition extracts content from scanned pages with automatic rotation correction and caching.",
+  },
+  {
+    icon: <FiLayers className="h-6 w-6" />,
+    title: "Strong Page Grouping",
+    description:
+      "TF-IDF similarity analysis and keyword boundary detection identify where one paper ends and another begins.",
+  },
+  {
+    icon: <FiFileText className="h-6 w-6" />,
+    title: "Multiple PDF Export",
+    description:
+      "Each detected paper is exported as a separate high-quality PDF with full metadata and confidence scores.",
+  },
+];
 
 export default function Home() {
   return (
     <>
-      <Section className="pt-16 text-center">
-        <h1 className="mb-4 text-4xl font-bold text-surface-800 sm:text-5xl">
-          Question Paper Sorter
-        </h1>
-        <p className="mx-auto mb-8 max-w-2xl text-lg text-surface-500">
-          Automatically sort scanned question papers into individual grouped
-          PDFs using OCR and document boundary detection.
-        </p>
-      </Section>
-
-      <Section title="How it works">
-        <div className="grid gap-6 sm:grid-cols-3">
-          {[
-            {
-              step: "1",
-              title: "Upload",
-              desc: "Upload a PDF or ZIP containing scanned question paper pages.",
-            },
-            {
-              step: "2",
-              title: "Process",
-              desc: "The engine runs OCR, detects boundaries, and groups pages into papers.",
-            },
-            {
-              step: "3",
-              title: "Download",
-              desc: "Download individually grouped PDFs with metadata.",
-            },
-          ].map((item) => (
-            <Card key={item.step}>
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-primary-600 font-semibold">
-                {item.step}
-              </div>
-              <h3 className="mb-2 text-lg font-semibold text-surface-800">
-                {item.title}
-              </h3>
-              <p className="text-sm text-surface-500">{item.desc}</p>
-            </Card>
-          ))}
+      {/* Hero */}
+      <section className="px-4 pt-20 pb-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            Separate Mixed Question Papers{" "}
+            <span className="text-primary">Automatically</span>
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Upload a PDF, ZIP, or Images and receive perfectly grouped PDFs in
+            minutes.
+          </p>
         </div>
-      </Section>
+      </section>
+
+      {/* Upload */}
+      <section className="px-4 pb-20 sm:px-6 lg:px-8">
+        <UploadCard />
+      </section>
+
+      {/* Features */}
+      <section className="border-t border-border bg-muted/30 px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 text-center">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+              Built for accuracy
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Every layer is designed to produce clean, correctly grouped output.
+            </p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <FeatureCard key={f.title} {...f} />
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }
