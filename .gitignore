@@ -4,6 +4,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
+dist/
+build/
 
 # ==================================================
 # Virtual Environment
@@ -34,32 +37,33 @@ logs/
 # Runtime Cache
 # ==================================================
 data/cache/*
-*.cache
-
-# ==================================================
-# Temporary Images Generated From PDFs
-# ==================================================
-data/temp/*
-
-# ==================================================
-# Generated Outputs
-# ==================================================
-data/output/*
-
-# ==================================================
-# Input PDFs
-# Keep folder structure only
-# ==================================================
-data/input/*
-
-# ==================================================
-# Keep Directory Structure
-# ==================================================
-!data/input/.gitkeep
-!data/output/.gitkeep
-!data/temp/.gitkeep
 !data/cache/.gitkeep
 
+# ==================================================
+# Temporary Images (PDF → images conversion)
+# ==================================================
+data/temp/*
+!data/temp/.gitkeep
+
+# ==================================================
+# Generated Outputs (CLI runs)
+# ==================================================
+output/
+output2/
+
+# ==================================================
+# Input PDFs (user-supplied, not committed)
+# ==================================================
+data/input/*
+!data/input/.gitkeep
+
+# ==================================================
+# Backend Uploads & Job Results
+# ==================================================
+backend/uploads/*
+!backend/uploads/.gitkeep
+!backend/uploads/results/
+!backend/uploads/results/.gitkeep
 # ==================================================
 # Testing
 # ==================================================
@@ -73,34 +77,8 @@ htmlcov/
 .ipynb_checkpoints/
 
 # ==================================================
-# Build Artifacts
-# ==================================================
-dist/
-build/
-*.egg-info/
-
-# ==================================================
-# Misc
+# Editor Swap Files
 # ==================================================
 *.swp
 *.swo
-
-venv/
-**pycache**/
-*.pyc
-
-data/temp/
-data/cache/
-output/akdnf;
-
-# Generated outputs
-output/
-output2/
-data/temp/
-
-# Backend uploads
-backend/uploads/
-
-# Python
-__pycache__/
-*.py[cod]
+*~
