@@ -9,6 +9,9 @@ from engine.product.group_detector import (
 from engine.product.page_orderer import (
     set_ordering_confidence,
 )
+from engine.product.paper_namer import (
+    name_groups,
+)
 from engine.product.exporter import (
     export_group,
     export_metadata,
@@ -81,9 +84,21 @@ def process(
                 f"{g.grouping_confidence}"
             )
 
+    groups = name_groups(groups)
+
     groups = set_ordering_confidence(
         groups, is_pdf=is_pdf
     )
+
+    if verbose:
+        print(
+            f"[Product] Paper names:"
+        )
+        for g in groups:
+            print(
+                f"  {g.paper_name}: "
+                f"{len(g.pages)} pages"
+            )
 
     out_path = Path(output_dir)
     out_path.mkdir(
@@ -91,9 +106,12 @@ def process(
     )
 
     pdf_paths = []
+    filename_counter: dict[str, int] = {}
     for group in groups:
         pdf = export_group(
-            group, str(out_path)
+            group,
+            str(out_path),
+            filename_counter,
         )
         pdf_paths.append(pdf)
         if verbose:

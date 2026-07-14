@@ -1,4 +1,5 @@
 import json
+import re
 
 from pathlib import Path
 
@@ -10,19 +11,35 @@ from engine.product.models import Group
 _PAGE_REORDERING_SUPPORTED = False
 
 
+def _sanitise_filename(name: str) -> str:
+    """Turn a paper name into a safe filesystem filename."""
+    safe = re.sub(r'[<>:"/\\|?*]', "", name)
+    safe = safe.strip()
+    return safe if safe else "paper"
+
+
 def export_group(
     group: Group,
     output_dir: str = "output",
+    filename_counter: dict[str, int] | None = None,
 ) -> str:
     output_path = Path(output_dir)
     output_path.mkdir(
         parents=True, exist_ok=True
     )
 
-    pdf_path = (
-        output_path
-        / f"group_{group.group_id}.pdf"
-    )
+    if filename_counter is None:
+        filename_counter = {}
+
+    base = _sanitise_filename(group.paper_name)
+    key = base.lower()
+    count = filename_counter.get(key, 0)
+    if count > 0:
+        filename_counter[key] = count + 1
+        pdf_path = output_path / f"{base} ({count + 1}).pdf"
+    else:
+        filename_counter[key] = 1
+        pdf_path = output_path / f"{base}.pdf"
 
     images = []
     for page in group.pages:
@@ -56,16 +73,33 @@ def export_metadata(
     )
 
     payload = []
+    filename_counter: dict[str, int] = {}
     for group in groups:
+        base = _sanitise_filename(
+            group.paper_name
+        )
+        key = base.lower()
+        count = filename_counter.get(key, 0)
+        if count > 0:
+            filename_counter[key] = count + 1
+            filename = (
+                f"{base} ({count + 1}).pdf"
+            )
+        else:
+            filename_counter[key] = 1
+            filename = f"{base}.pdf"
+
         entry = {
-            "group_id": group.group_id,
-            "num_pages": len(group.pages),
+            "paper_name": group.paper_name,
+            "filename": filename,
+            "page_count": len(group.pages),
             "grouping_confidence": (
                 group.grouping_confidence
             ),
             "ordering_confidence": (
                 group.ordering_confidence
             ),
+            "group_id": group.group_id,
             "pages": [
                 {
                     "index": p.index,

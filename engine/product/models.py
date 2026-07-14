@@ -14,3 +14,4 @@ class Group:
     pages: list[Page]
     grouping_confidence: float = 0.0
     ordering_confidence: float = 0.0
+    paper_name: str = "Unknown Paper"
